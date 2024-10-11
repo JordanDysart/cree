@@ -14,7 +14,7 @@ import { InputCommand } from "./commands/input";
 const cli = new Cli({
     binaryLabel: "Cree CLI",
     binaryName: 'cree',
-    binaryVersion: "1.0.0",
+    binaryVersion: "0.0.1",
     enableColors: true,
 });
 

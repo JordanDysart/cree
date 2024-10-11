@@ -48,9 +48,10 @@ class InputCommand extends clipanion_1.Command {
                 email: email,
                 age: parseInt(this.age),
             };
-            yield db_1.db.insert(schema_1.users).values(user);
+            const db = yield (0, db_1.getDb)();
+            yield db.insert(schema_1.users).values(user);
             this.context.stdout.write(`User inserted\n`);
-            const u = yield db_1.db.select().from(schema_1.users);
+            const u = yield db.select().from(schema_1.users);
             this.context.stdout.write(`getting alll users from table\n`);
             for (const user of u) {
                 this.context.stdout.write(`User: ${user.name} ${user.email} ${user.age}\n`);

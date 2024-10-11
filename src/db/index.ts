@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
+import { drizzle } from 'drizzle-orm/connect';
 
-export const client = createClient({ url: process.env.DB_FILE_NAME! });
-export const db = drizzle(client);
+export const getDb = async () => {
+  return await drizzle("libsql", process.env.DB_FILE_NAME!);
+}
 

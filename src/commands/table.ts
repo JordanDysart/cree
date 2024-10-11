@@ -4,10 +4,14 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/libsql';
 
 import * as schema from '../db/schema';
-import { client } from '../db';
+import { getDb } from '../db';
+
 import { getSchema } from '../db/utils/createEntry';
-import { multiSelect, select } from '../utils/input';
+import { input, multiSelect, select } from '../utils/input';
 import {Tables, type Table} from '../db/types';
+import { RelationalQueryBuilder } from 'drizzle-orm/mysql-core/query-builders/query';
+import { SelectedFields } from 'drizzle-orm';
+import { SQLiteTable } from 'drizzle-orm/sqlite-core';
 
 export class TableCommand extends Command {
     static paths = [
@@ -35,19 +39,28 @@ export class TableCommand extends Command {
         ]],
     });
 
-    private db = drizzle(client, { schema });
-
     async execute() {
 
         if (this.path[1] === 'create') {
-            const tableIndex = await select('what kind of entry? ', Tables) as keyof Table;
-            const schema = getSchema(tableIndex);
-            console.log(schema);
+            const tableIndex = await select('what kind of entry? ', Tables) as  Table;
+            const schoma = await getSchema(tableIndex) as SQLiteTable;
+            try {
+                const db = await getDb();
+                const results = await db.select().from(schoma);
+                
+                for (const result of results) {
+                    this.context.stdout.write(result);
+                }
+                // const results = await db.select.from(tableIndex);
+                // console.log(results);
+            } catch (e) {
+                console.error(e);
+            }
+
+            // console.log(schema);
             
         }
 
-        const results: typeof schema.users.$inferSelect[] = await this.db.query.users.findMany();
-        this.context.stdout.write(JSON.stringify(results, null, 2));
         return 0;
     }
 }

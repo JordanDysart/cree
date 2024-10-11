@@ -11,7 +11,7 @@ const input_1 = require("./commands/input");
 const cli = new clipanion_1.Cli({
     binaryLabel: "Cree CLI",
     binaryName: 'cree',
-    binaryVersion: "1.0.0",
+    binaryVersion: "0.0.1",
     enableColors: true,
 });
 cli.register(database_1.DatabaseCommand);

@@ -1,6 +1,6 @@
 import { Command, Option } from 'clipanion';
 
-import { db } from '../../db';
+import { getDb } from '../../db';
 import { users } from '../../db/schema';
 import { input } from '../../utils/input';
 
@@ -60,6 +60,8 @@ export class InputCommand extends Command {
             email: email,
             age: parseInt(this.age),
         };
+
+        const db = await getDb();
 
         await db.insert(users).values(user);
         this.context.stdout.write(`User inserted\n`);
